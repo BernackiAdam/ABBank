@@ -1,0 +1,26 @@
+version: '3.7'
+
+services:
+
+
+  mysql-db:
+    image: mysql:latest
+    container_name: user-service-db
+    environment:
+      - MYSQL_ROOT_PASSWORD=rootpassword
+      - MYSQL_DATABASE=user-service-db
+      - MYSQL_USER=bank-user
+      - MYSQL_PASSWORD=bank-user-password
+    ports:
+      - "3307:3306"
+    volumes:
+      - user-service-db-data:/var/lib/mysql
+    networks:
+      - abbank-network
+
+networks:
+  abbank-network:
+
+volumes:
+  user-service-db-data:
+
