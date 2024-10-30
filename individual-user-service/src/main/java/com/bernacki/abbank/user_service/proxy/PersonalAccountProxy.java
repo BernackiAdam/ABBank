@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(name = "personal-account-service")
 public interface PersonalAccountProxy {
 
-    @GetMapping("/v1/accounts/{id}")
+    @GetMapping("${personal-account-service-endpoint.accList}{id}")
     CollectionModel<PersonalAccountDTO> getUserAccounts(@PathVariable long id);
 
-    @PostMapping("/v1/accounts/add/{userId}")
+    @PostMapping("/${service-url.accAddEndpoint}/{userId}")
     void addNewAccountForUser(@PathVariable long userId);
 }

@@ -1,5 +1,6 @@
 package com.bernacki.abbank.user_service.controller;
 
+import com.bernacki.abbank.user_service.configuration.UrlConfiguration;
 import com.bernacki.abbank.user_service.entity.IndividualUser;
 import com.bernacki.abbank.user_service.exceptions.UserNotFoundException;
 import com.bernacki.abbank.user_service.proxy.PersonalAccountProxy;
@@ -25,6 +26,9 @@ public class UserController {
     @Autowired
     private PersonalAccountProxy proxy;
 
+    @Autowired
+    private UrlConfiguration urlConfig;
+
     @GetMapping("/all")
     public List<IndividualUser> getAllUsers(){
         return userRepository.findAll();
@@ -35,12 +39,12 @@ public class UserController {
         IndividualUser user = userRepository.findById(id)
                 .orElseThrow(() ->new UserNotFoundException("Could not find user with id: " + id));
         EntityModel<IndividualUser> entityModel = EntityModel.of(user);
-//        Link personalAccountsLink = WebMvcLinkBuilder.linkTo(
-//                WebMvcLinkBuilder
-//                        .methodOn(PersonalAccountProxy.class).getUserAccounts(id)
-//        ).withRel("personal accounts");
+
         String personalAccountsUrl = String.format(
-                "http://localhost:8765/v1/accounts/%d", id
+                "%s/%s/%d",
+                urlConfig.getGatewayUrl(),
+                urlConfig.getAccListEndpoint(),
+                id
         );
         Link personalAccountsLink = Link.of(personalAccountsUrl).withRel("personal accounts");
 
